@@ -28,28 +28,72 @@
   </div>
   <div class="container main">
     <div class="panel panel-default panel-margin col-sm-3 col-sm-offset-1">
-      <form class="form-horizontal col-sm-12" role="form">
+      <div class="form-horizontal col-sm-12">
         <div class="form-group">
           <h3>What classes have you taken at NU?</h3>
-          <input type="email" class="form-control" id="classes" placeholder="Enter classes taken...">
+          <input autocomplete="off" type="text" class="form-control" id="classes" placeholder="Enter classes taken...">
         </div>
-      </div>
-      <div class="panel panel-default col-sm-7">
-        <h3>Suggestions:</h3>
+        <ul id="class-list" class="list-group">
+          <a class="list-group-item active">List of Classes</a>
+        </ul>
       </div>
     </div>
+    <div class="panel panel-default col-sm-7">
+      <h3>Suggestions:</h3>
+    </div>
   </div>
-  <script>
-    crs ="{{crs}}";
-    crs = crs.split("|");
-    courses = [];
-    for(var i = 0; i < crs.length; i++) {
-      var course = crs[i].split("::");
-      courses.push(course);
-    }
-  </script>
   <script src="{{url_for('static',filename='js/jquery.min.js')}}" rel="stylesheet"></script>
   <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" rel="stylesheet"></script>
   <script src="{{url_for('static', filename='js/index.js')}}" rel="stylesheet"></script>
+  <script src="{{url_for('static', filename='js/typeahead.js')}}" rel="stylesheet"></script>
+  <script>
+  var crs = "{{crs}}";
+  crs = crs.split("|");
+  var courses = [];
+  var courseNames = [];
+  var classesTaken = [];
+  for (var i = 0; i < crs.length; i++) {
+    var course = crs[i].split("::");
+    courses.push(course);
+    courseNames.push(course[0] + " " + course[1]);
+  }
+
+  $("#classes").typeahead({
+    displayKey: 'value',
+    source: courseNames,
+    updater: function(course) {
+      addTakenClass(course);
+    }
+  });
+
+  $("#classes").keyup(function(e) {
+    if (e.keyCode == 13) {
+      var course = $("#classes").val();
+      addTakenClass(course);
+    }
+  });
+
+  function addTakenClass(course) {
+    if(classesTaken.indexOf(course) < 0) {
+      classesTaken.push(course)
+      $("#class-list").html('<a class="list-group-item active">List of Classes</a>');
+      for(var i = 0; i < classesTaken.length; i++) {
+        $("#class-list").append(
+          '<li id="class' + i + '" class="list-group-item">' + classesTaken[i] + '<button href="#class' + i + '" class="pull-right btn btn-default remove"><span class="glyphicon glyphicon-remove"</span></button></li>'
+          );
+        $("#classes").val('');
+      }
+    }
+
+    $(".remove").click(function() {
+      var index = parseInt($(this).attr("href").replace("#class"), 10);
+      classesTaken.splice(index, 1);
+      $($(this).attr("href")).remove();
+    }); 
+  }
+
+
+
+  </script>
 </body>
 </html>
