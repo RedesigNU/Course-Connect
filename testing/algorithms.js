@@ -32,15 +32,7 @@ function compute_distance(tbl1, tbl2)
 
 function get_class_scores(courses_table, student_taken)
 {
-	var classes_scores = [
-		[],
-		[],
-		[],
-		[],
-		[],
-		[],
-		[]
-			];
+	var classes_scores = [];
 
 	for (var i = 0; i < courses_table.length; i++) 
 	{
@@ -54,13 +46,15 @@ function get_class_scores(courses_table, student_taken)
 			//iterates through the classes the student has taken
 			if (student_taken[x][0] == department && student_taken[x][1] == number) 
 			{
+				classes_arr = []
 				//if there is a match
 				//found a class he takes
 				for (var counter = 0; counter < 7; counter++) 
 				{
 					//pushes the score for that class into his classes_scores array
-					classes_scores[counter].push(courses_table[i][counter + 2]);
+					classes_arr.push(courses_table[i][counter + 2]);
 				}
+				classes_scores.push(classes_arr);
 			}
 		}
 	}
@@ -112,9 +106,9 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 	//we now need to compute averages
 	for (var place = 0; place < 7; place++) {
 		for (var counter = 0; counter < classes_taken; counter++) {
-			classes_scores_average[place] += classes_scores[place][counter];
+			classes_scores_average[place] += classes_scores[counter][place];
 		}
-		classes_scores_average[place] /= classes_taken;
+		classes_scores_average[counter] /= classes_taken;
 	}
 	//the average score is now computed
 
