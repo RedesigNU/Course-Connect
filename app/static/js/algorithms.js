@@ -216,7 +216,8 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 		}
 
 	}
-	recommedations.sort(compare);
+
+	//recommedations.sort(compare);
 	return recommedations;
 	//we now have all the scores for the classes
 	//
