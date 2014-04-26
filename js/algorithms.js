@@ -42,7 +42,7 @@ function compute_distance (tbl1, tbl2)
 
 
 
-function recommend_classes (dept_tbl, student_enrolled, student_taken, requested_dpt)
+function recommend_classes (dept_tbl, student_enrolled, student_taken, requested_dept)
 {
 
 	var recommedations=[];
@@ -136,11 +136,11 @@ function recommend_classes (dept_tbl, student_enrolled, student_taken, requested
 	var arr=[];
 
 	//we now have the average radius
-	//now go through dpt_tbl
+	//now go through dept_tbl
 	//
-	if (requested_dpt=="NULL")
+	if (requested_dept=="NULL")
 	{
-		for( var i=0; i<dpt_tbl.length; i++)
+		for( var i=0; i<dept_tbl.length; i++)
 		{
 			arr=[];
 
@@ -167,11 +167,11 @@ function recommend_classes (dept_tbl, student_enrolled, student_taken, requested
 	else
 	{
 		//we have a request
-		for( var i=0; i<dpt_tbl.length; i++)
+		for( var i=0; i<dept_tbl.length; i++)
 		{
 			arr=[];
 
-			if(dpt_tbl[i][0]==requested_dpt)
+			if(dept_tbl[i][0]==requested_dept)
 			{
 				
 
