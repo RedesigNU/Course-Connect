@@ -52,6 +52,10 @@ def courses():
 	response = urllib2.urlopen(url)
 	return response.read()
 
+@app.route("/scatter")
+def scatter():
+	return render_template("scatter.html");
+
 @app.route("/rate")
 def rate():
 	courses = ""
