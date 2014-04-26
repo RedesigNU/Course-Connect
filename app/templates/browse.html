@@ -31,19 +31,27 @@
 			<h3>Search:</h3>
 			<div class="form-group col-sm-12">
 				<div class="form-group">
-					<input autocomplete="off" type="text" class="form-control" id="classes" placeholder="Enter classes taken...">
+					<input autocomplete="off" type="text" class="form-control" id="classes" placeholder="Search classes!">
 				</div>
+				<div>
+					<h5>Term:</h5>
+					<select id="terms" class="form-control browse-dropdown">
+					</select>
+				</div>
+				<p></p>
+				<div>
+					<h5>Department:</h5>
+					<select id="departments" class="form-control browse-dropdown">
+					</select>
+				</div>
+				<p></p>
 				<ul id="class-list" class="list-group">
 					<a class="list-group-item active">List of Classes</a>
 				</ul>
 			</div>
 		</div>
 		<div class="panel panel-default col-sm-6">
-			hi
-		</div>
-		<div hidden=true>
-			<select id="combobox" class="form-control">
-			</select>
+			<h3>Calendar View</h3>
 		</div>
 	</div>
 	<script src="{{url_for('static', filename='js/jquery.min.js')}}" rel="stylesheet"></script>
@@ -52,13 +60,39 @@
 	<script src="{{url_for('static', filename='js/index.js')}}" rel="stylesheet"></script>
 	<script>
 	$.ajax({
-		url: "department",
+		url: "departments",
 		success: function(data) {
 			$($.parseJSON(data)).map(function() {
 				console.log(this.symbol);
-				$('#combobox').append($('<option>').val(this.symbol).text(this.name));
+				$('#departments').append($('<option>').val(this.symbol).text(this.name));
 			});
 		}
+	});
+
+	$.ajax({
+		url: "terms",
+		success: function(data) {
+			$($.parseJSON(data)).map(function() {
+				console.log(data);
+				$('#terms').append($('<option>').val(this.term_id).text(this.name));
+			});
+		}
+	});
+
+	$(".browse-dropdown").change(function(){
+		$.ajax({
+			url: "courses",
+			data: {
+				term: $('#terms').val(),
+				subject: $('#departments').val()
+			},
+			success: function(data) {
+				$('#class-list').html('<a class="list-group-item active">List of Classes</a>');
+				$($.parseJSON(data)).map(function() {
+					$('#class-list').append('<li class="list-group-item">' + this.title + '</li>')
+				});
+			}
+		})
 	});
 
 	var crs = "{{crs}}";

@@ -1,4 +1,5 @@
 from flask import render_template
+from flask import request
 from app import app
 import urllib2
 import os
@@ -29,9 +30,24 @@ def browse():
 	for lyne in fyle :
 		courses += lyne.rstrip() + "|"
 	fyle.close()
+
 	return render_template("browse.html", crs=courses)
 
-@app.route("/department")
-def department():
+@app.route("/departments")
+def departments():
 	response = urllib2.urlopen('http://vazzak2.ci.northwestern.edu/subjects/')
+	return response.read()
+
+@app.route("/terms")
+def terms():
+	response = urllib2.urlopen('http://vazzak2.ci.northwestern.edu/terms/')
+	return response.read()
+
+@app.route("/courses")
+def courses():
+	term = request.args.get('term')
+	subject = request.args.get('subject')
+	url = 'http://vazzak2.ci.northwestern.edu/courses/?term=' + str(term) + '&subject=' + str(subject)
+	print url
+	response = urllib2.urlopen(url)
 	return response.read()
