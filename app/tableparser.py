@@ -1,11 +1,11 @@
 def parse():
 	courses = []
-	file = open("table.txt")
-	for line in file :
+	fyle = open("table.txt")
+	for lyne in fyle :
 		# Do string processing here
-		arr_parsed = unicode(line.split(":"))
+		arr_parsed = lyne.split(":")
 		courses.append(arr_parsed)
-	file.close()
+	fyle.close()
 	return courses;
 
 # #checkpoint

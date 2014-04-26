@@ -90,7 +90,7 @@ for i in range(0, len(courses)):
 	test = courses[i]
 	line = test[0]
 	for j in range(1, len(test)):
-		line += ":" + str(test[j])
+		line += "::" + str(test[j])
 	line += "\n"
 	f.write(line)
 f.close()

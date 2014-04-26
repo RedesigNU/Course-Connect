@@ -1,5 +1,5 @@
 .main {
-	margin-top: 50px;
+	margin-top: 55px;
 }
 
 .center {
@@ -8,4 +8,12 @@
 
 .btn {
 	margin: 4px;
+}
+
+.navbar-purple {
+	/*background-color: #520063;*/
+}
+
+.panel-margin {
+	margin-right: 5px;
 }
