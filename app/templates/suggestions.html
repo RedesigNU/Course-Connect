@@ -51,7 +51,9 @@
       </div>
       <div class="panel panel-default col-sm-7">
         <h3>Suggestions:</h3>
-        <div id="scatter">
+        <div>
+          <div id="scatter">
+          </div>
         </div>
         <ul id="suggestions" class="list-group"></ul>
       </div>
@@ -61,6 +63,8 @@
     <script src="{{url_for('static', filename='js/index.js')}}" rel="stylesheet"></script>
     <script src="{{url_for('static', filename='js/typeahead.js')}}" rel="stylesheet"></script>
     <script src="{{url_for('static', filename='js/algorithms.js')}}" rel="stylesheet"></script>
+    <script src="../static/js/highcharts.js"></script>
+    <script src="../static/js/modules/exporting.js"></script>
     <script>
     $.ajax({
       url: "departments",
@@ -70,8 +74,6 @@
         });
       }
     });
-
-    $("#scatter").load("scatter");
 
     var crs = "{{crs}}";
     crs = crs.split("|");
@@ -104,6 +106,10 @@
     });
 
     $("#suggest").click(function() {
+      var parent = $("#scatter").parent();
+      $("#scatter").remove();
+      parent.append('<div id="scatter"></div>');
+      $("#scatter").load("scatter");
       a=recommend_classes(courses, [], student_taken, $("#departments").val());
       $("#suggestions").html('');
       for(var i = 0; i < a.length; i++) {
