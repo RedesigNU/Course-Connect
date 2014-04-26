@@ -27,43 +27,50 @@
 		</div>
 	</div>
 	<div class="container main">
-		<div class="panel panel-default col-sm-6 panel-margin-top">
-			<h3>Search:</h3>
-			<div class="form-group col-sm-12">
-				<div class="form-group">
-					<input autocomplete="off" type="text" class="form-control" id="classes" placeholder="Search classes!">
+		<div class="everything-else">
+			<div class="panel panel-default col-sm-4 panel-margin-top">
+				<h3>Search:</h3>
+				<div class="form-group col-sm-12">
+					<div class="form-group">
+						<input autocomplete="off" type="text" class="form-control" id="classes" placeholder="Search classes!">
+					</div>
+					<div>
+						<h5>Term:</h5>
+						<select id="terms" class="form-control browse-dropdown">
+						</select>
+					</div>
+					<p></p>
+					<div>
+						<h5>Department:</h5>
+						<select id="departments" class="form-control browse-dropdown">
+						</select>
+					</div>
+					<p></p>
+					<ul id="class-list" class="list-group">
+						<a class="list-group-item active">List of Classes<div id="spinner" class="pull-right"></div></a>
+					</ul>
 				</div>
-				<div>
-					<h5>Term:</h5>
-					<select id="terms" class="form-control browse-dropdown">
-					</select>
-				</div>
-				<p></p>
-				<div>
-					<h5>Department:</h5>
-					<select id="departments" class="form-control browse-dropdown">
-					</select>
-				</div>
-				<p></p>
-				<ul id="class-list" class="list-group">
-					<a class="list-group-item active">List of Classes</a>
-				</ul>
 			</div>
-		</div>
-		<div class="panel panel-default col-sm-6">
-			<h3>Calendar View</h3>
+			<div class="panel panel-default col-sm-8">
+				<h3>Calendar View</h3>
+			</div>
 		</div>
 	</div>
 	<script src="{{url_for('static', filename='js/jquery.min.js')}}" rel="stylesheet"></script>
 	<script src="{{url_for('static', filename='js/bootstrap.min.js')}}" rel="stylesheet"></script>
 	<script src="{{url_for('static', filename='js/typeahead.js')}}"></script>
 	<script src="{{url_for('static', filename='js/index.js')}}" rel="stylesheet"></script>
+	<script src="{{url_for('static', filename='js/algorithms.js')}}" rel="stylesheet"></script>
+	<script src="{{url_for('static', filename='js/spin.min.js')}}" rel="stylesheet"></script>
 	<script>
+	var spinner = new Spinner({
+		radius: 6,
+		width: 3}).spin($("#spinner").get(0));
+	$('#spinner').hide();
 	$.ajax({
 		url: "departments",
 		success: function(data) {
 			$($.parseJSON(data)).map(function() {
-				console.log(this.symbol);
 				$('#departments').append($('<option>').val(this.symbol).text(this.name));
 			});
 		}
@@ -73,13 +80,13 @@
 		url: "terms",
 		success: function(data) {
 			$($.parseJSON(data)).map(function() {
-				console.log(data);
 				$('#terms').append($('<option>').val(this.term_id).text(this.name));
 			});
 		}
 	});
 
 	$(".browse-dropdown").change(function(){
+		$('#spinner').show();
 		$.ajax({
 			url: "courses",
 			data: {
@@ -87,10 +94,17 @@
 				subject: $('#departments').val()
 			},
 			success: function(data) {
-				$('#class-list').html('<a class="list-group-item active">List of Classes</a>');
-				$($.parseJSON(data)).map(function() {
-					$('#class-list').append('<li class="list-group-item">' + this.title + '</li>')
-				});
+				$('#spinner').hide();
+				$('#class-list').html('<a class="list-group-item active">List of Classes<div id="spinner" class="pull-right"></div></a>');
+				var obj = $.parseJSON(data);
+				console.log(obj.length);
+				if(obj.length == 0) {
+					$('#class-list').append('<a href="#" class="list-group-item">No classes available</a>');
+				} else {
+					$(obj).map(function() {
+						$('#class-list').append('<a href="#" class="list-group-item">' + this.title + '</a>');
+					});
+				}
 			}
 		})
 	});
@@ -100,7 +114,7 @@
 	crs = crs.split("|");
 	var courses = [];
 	var courseNames = [];
-	var classesTaken = [];
+	var classes = [];
 	var student_taken = [];
 	for (var i = 0; i < crs.length; i++) {
 		var course = crs[i].split("::");
@@ -113,7 +127,7 @@
 		displayKey: 'value',
 		source: courseNames,
 		updater: function(course) {
-			addTakenClass(course);
+			addClass(course);
 		}
 	});
 
@@ -121,7 +135,7 @@
 	$("#classes").keyup(function(e) {
 		if (e.keyCode == 13) {
 			var course = $("#classes").val();
-			addTakenClass(course);
+			addClass(course);
 		}
 	});
 
@@ -129,16 +143,15 @@
 	$("#suggest").click(function() {
 		a=recommend_classes(courses, [], student_taken, "NULL");
 	});
-
 	
-	function addTakenClass(course) {
-		if(classesTaken.indexOf(course) < 0) {
+	function addClass(course) {
+		if(classes.indexOf(course) < 0) {
 			student_taken.push(course.split(' '));  
-			classesTaken.push(course)
+			classes.push(course)
 			$("#class-list").html('<a class="list-group-item active">List of Classes</a>');
-			for(var i = 0; i < classesTaken.length; i++) {
+			for(var i = 0; i < classes.length; i++) {
 				$("#class-list").append(
-					'<li id="class' + i + '" class="list-group-item">' + classesTaken[i] + '<button href="#class' + i + '" class="pull-right btn btn-default remove"><span class="glyphicon glyphicon-remove"</span></button></li>'
+					'<a id="class' + i + '" class="list-group-item"><h4>' + classes[i] + '</h4><button href="#class' + i + '" class="pull-right btn btn-default remove"><span class="glyphicon glyphicon-remove"</span></button></a>'
 					);
 				$("#classes").val('');
 			}
@@ -146,7 +159,7 @@
 
 		$(".remove").click(function() {
 			var index = parseInt($(this).attr("href").replace("#class"), 10);
-			classesTaken.splice(index, 1);
+			classes.splice(index, 1);
 			student_taken.splice(index, 1)
 			$($(this).attr("href")).remove();
 		});

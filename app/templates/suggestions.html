@@ -26,81 +26,99 @@
       </div>
     </div>
   </div>
-  <div class="container main">
+  <div class="container main panel-opacity">
     <div class="panel panel-default panel-margin col-sm-3 col-sm-offset-1">
-      <div class="form-group col-sm-12">
-        <div class="form-group">
-          <h3>What classes have you taken at NU?</h3>
-          <input autocomplete="off" type="text" class="form-control" id="classes" placeholder="Enter classes taken...">
+      <div class="everything-else">
+        <div class="form-group col-sm-12">
+          <div class="form-group">
+            <h3>What classes have you taken at NU?</h3>
+            <h5>Classes:</h5>
+            <input autocomplete="off" type="text" class="form-control" id="classes" placeholder="Enter classes taken...">
+            <p><p>
+              <div>
+                <h5>Department:</h5>
+                <select id="departments" class="form-control browse-dropdown">
+                </select>
+              </div>
+            </div>
+            <ul id="class-list" class="list-group">
+              <a class="list-group-item active">List of Classes</a>
+            </ul>
+            <button id="suggest" class="btn btn-default" style="margin-left: -1px;">Suggest Classes</button>
+          </div>
         </div>
-        <ul id="class-list" class="list-group">
-          <a class="list-group-item active">List of Classes</a>
-        </ul>
-        <button id="suggest" class="btn btn-default" style="margin-left: -1px;">Suggest Classes</button>
+      </div>
+      <div class="panel panel-default col-sm-7">
+        <h3>Suggestions:</h3>
       </div>
     </div>
-    <div class="panel panel-default col-sm-7">
-      <h3>Suggestions:</h3>
-    </div>
-  </div>
-  <script src="{{url_for('static',filename='js/jquery.min.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/index.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/typeahead.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/algorithms.js')}}" rel="stylesheet"></script>
-  <script>
-  var crs = "{{crs}}";
-  crs = crs.split("|");
-  var courses = [];
-  var courseNames = [];
-  var classesTaken = [];
-  var student_taken = [];
-  for (var i = 0; i < crs.length; i++) {
-    var course = crs[i].split("::");
-    courses.push(course);
-    courseNames.push(course[0] + " " + course[1]);
-  }
-
-  $("#classes").typeahead({
-    displayKey: 'value',
-    source: courseNames,
-    updater: function(course) {
-      addTakenClass(course);
-    }
-  });
-
-  $("#classes").keyup(function(e) {
-    if (e.keyCode == 13) {
-      var course = $("#classes").val();
-      addTakenClass(course);
-    }
-  });
-
-  $("#suggest").click(function() {
-    a=recommend_classes(courses, [], student_taken, "NULL");
-  });
-
-  function addTakenClass(course) {
-    if(classesTaken.indexOf(course) < 0) {
-      student_taken.push(course.split(' '));  
-      classesTaken.push(course)
-      $("#class-list").html('<a class="list-group-item active">List of Classes</a>');
-      for(var i = 0; i < classesTaken.length; i++) {
-        $("#class-list").append(
-          '<li id="class' + i + '" class="list-group-item">' + classesTaken[i] + '<button href="#class' + i + '" class="pull-right btn btn-default remove"><span class="glyphicon glyphicon-remove"</span></button></li>'
-          );
-        $("#classes").val('');
+    <script src="{{url_for('static',filename='js/jquery.min.js')}}" rel="stylesheet"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" rel="stylesheet"></script>
+    <script src="{{url_for('static', filename='js/index.js')}}" rel="stylesheet"></script>
+    <script src="{{url_for('static', filename='js/typeahead.js')}}" rel="stylesheet"></script>
+    <script src="{{url_for('static', filename='js/algorithms.js')}}" rel="stylesheet"></script>
+    <script>
+    $.ajax({
+      url: "departments",
+      success: function(data) {
+        $($.parseJSON(data)).map(function() {
+          $('#departments').append($('<option>').val(this.symbol).text(this.name));
+        });
       }
+    });
+
+    var crs = "{{crs}}";
+    crs = crs.split("|");
+    var courses = [];
+    var courseNames = [];
+    var classesTaken = [];
+    var student_taken = [];
+    for (var i = 0; i < crs.length; i++) {
+      var course = crs[i].split("::");
+      courses.push(course);
+      courseNames.push(course[0] + " " + course[1]);
     }
 
-    $(".remove").click(function() {
-      var index = parseInt($(this).attr("href").replace("#class"), 10);
-      classesTaken.splice(index, 1);
-      student_taken.splice(index, 1)
-      $($(this).attr("href")).remove();
-    }); 
-  }
+    $("#classes").typeahead({
+      displayKey: 'value',
+      source: courseNames,
+      updater: function(course) {
+        addTakenClass(course);
+      }
+    });
 
-  </script>
-</body>
-</html>
+    $("#classes").keyup(function(e) {
+      if (e.keyCode == 13) {
+        var course = $("#classes").val();
+        addTakenClass(course);
+      }
+    });
+
+    $("#suggest").click(function() {
+      a=recommend_classes(courses, [], student_taken, "NULL");
+    });
+
+    function addTakenClass(course) {
+      if(classesTaken.indexOf(course) < 0) {
+        student_taken.push(course.split(' '));  
+        classesTaken.push(course)
+        $("#class-list").html('<a class="list-group-item active">List of Classes</a>');
+        for(var i = 0; i < classesTaken.length; i++) {
+          $("#class-list").append(
+            '<li id="class' + i + '" class="list-group-item">' + classesTaken[i] + '<button href="#class' + i + '" class="pull-right btn btn-default remove"><span class="glyphicon glyphicon-remove"</span></button></li>'
+            );
+          $("#classes").val('');
+        }
+      }
+
+      $(".remove").click(function() {
+        var index = parseInt($(this).attr("href").replace("#class"), 10);
+        classesTaken.splice(index, 1);
+        student_taken.splice(index, 1)
+        $($(this).attr("href")).remove();
+      }); 
+    }
+
+    </script>
+  </body>
+  </html>

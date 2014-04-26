@@ -1,3 +1,17 @@
+body {
+	background-image:url('/static/imgs/arch_opacity.png');
+	background-color:#cccccc;
+	background-size:100%;
+}
+
+.panel-opacity {
+	opacity: 0.9;
+}
+
+.everything-else {
+	opacity: 1.0;
+}
+
 .main {
 	margin-top: 55px;
 }
