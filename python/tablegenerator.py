@@ -23,13 +23,14 @@ resp = urllib2.urlopen("http://vazzak2.ci.northwestern.edu/terms/")
 html = resp.read()
 
 #parse
-terms = []
+#terms = []
 js = json.loads(html)
-for x in range(0, len(js)):
-	terms.append(js[0]['term_id'])
+#for x in range(0, len(js)):
+term = js[0]['term_id']
 
 #checkpoint
-print terms[0]
+#print terms[0]
+print term
 
 #looping through the departments and generating for one term
 #1) overall rating of instruction
@@ -41,16 +42,16 @@ print terms[0]
 #7) how fulfilling was the class
 courses = []
 count = 0
-for term in terms:
-	print term
-	for dept in depts:
-		resp = urllib2.urlopen("http://vazzak2.ci.northwestern.edu/courses/?term=" + str(term) + "&subject=" + dept)
-		html = resp.read()
-		js = json.loads(html)
-		print dept
+#for term in terms:
+for dept in depts:
+	resp = urllib2.urlopen("http://vazzak2.ci.northwestern.edu/courses/?term=" + str(term) + "&subject=" + dept)
+	html = resp.read()
+	js = json.loads(html)
+	if (not html == ''):
+#		print dept
 		for x in range(0, len(js)):
 			class_title = js[x]['title']
-			print class_title
+#			print class_title
 			class_num = js[x]['catalog_num']
 			instructor = js[x]['instructor']['name']
 			location = js[x]['room']
@@ -61,10 +62,36 @@ for term in terms:
 			rating5 = random.randint(1,3)
 			rating6 = random.randint(1,3)
 			rating7 = random.randint(1,3)
-			courses.append([dept, class_num, rating1, rating2, rating3, rating4, rating5, rating6, rating7, class_title, instructor, location])
-		print "\n"
-	print "\n\n"
+			start_time = js[x]['start_time']
+			end_time = js[x]['end_time']
+			days = js[x]['meeting_days']
+			#Check if there are components (Labs, Discussion, etc)
+			components = []
+			comp = js[x]['coursecomponent_set']
+			if (comp == ''):
+				components.append([""])
+			else:
+				for ii in range(0, len(comp)):
+					components.append([comp[ii]['meeting_days'], comp[ii]['start_time'], comp[ii]['end_time'], comp[ii]['room'], comp[ii]['section']])
+			courses.append([dept, class_num, rating1, rating2, rating3, rating4, rating5, rating6, rating7, class_title, instructor, location, start_time, end_time, days, components])
+#		print "\n"
 
 
 #checkpoint
-print len(courses)
+for i in range(0, len(courses)):
+	test = courses[i]
+	for j in range(0, len(test)):
+		print test[j]
+	print "\n"
+
+#writing to file
+f = open('table.txt', 'w')
+for i in range(0, len(courses)):
+	test = courses[i]
+	line = test[0]
+	for j in range(1, len(test)):
+		line += ":" + str(test[j])
+	line += "\n"
+	f.write(line)
+f.close()
+	
