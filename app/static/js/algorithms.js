@@ -137,7 +137,7 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 	}
 	average_difference /= classes_taken;
 
-	average_difference *= 1.5;
+	average_difference *= 0.5;
 
 	// console.log(average_difference);
 
