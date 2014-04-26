@@ -18,6 +18,10 @@
 	margin-right: 5px;
 }
 
+.panel-margin-top {
+	padding-top: 0px;
+}
+
 .remove {
 	height: 30px;
 	margin-top: -5px;

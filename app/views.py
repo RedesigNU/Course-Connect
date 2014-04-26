@@ -21,12 +21,17 @@ def suggestions():
 
 	return render_template("suggestions.html", crs=courses)
 
-@app.route("/find")
-def find():
-	return render_template("find.html")
+@app.route("/browse")
+def browse():
+	courses = ""
+	path = os.path.dirname(os.path.abspath(__file__)) + "/table.txt"
+	fyle = open(path)
+	for lyne in fyle :
+		courses += lyne.rstrip() + "|"
+	fyle.close()
+	return render_template("browse.html", crs=courses)
 
-# @app.route("/department")
-# def department():
-# 	dept = request.args.get('dept')
-# 	response = urllib2.urlopen('http://vazzak2.ci.northwestern.edu/courses/')
-# 	return response.read()
+@app.route("/department")
+def department():
+	response = urllib2.urlopen('http://vazzak2.ci.northwestern.edu/subjects/')
+	return response.read()

@@ -1,4 +1,4 @@
-//assume dept_tbl is our department table
+//assume courses_table is our department table
 //eecs 111 5.1 5.0 2.4 ...
 //assume student object with two tables
 //assume we have an enrolled table
@@ -17,7 +17,7 @@ function compute_distance(tbl1, tbl2)
 	var returnme = 0;
 	var first = 0;
 	var second = 0;
-	for (int i = 0; i < tbl1.length; i++) {
+	for (var i = 0; i < tbl1.length; i++) {
 
 		first = Math.pow(tbl1[i], 2);
 		second = Math.pow(tbl2[i], 2);
@@ -32,7 +32,7 @@ function compute_distance(tbl1, tbl2)
 
 
 
-function recommend_classes(dept_tbl, student_enrolled, student_taken, requested_dept) {
+function recommend_classes(courses_table, student_enrolled, student_taken, requested_dept) {
 
 	var recommedations = [];
 
@@ -60,10 +60,10 @@ function recommend_classes(dept_tbl, student_enrolled, student_taken, requested_
 	var classes_scores_average = [0, 0, 0, 0, 0, 0, 0]
 	//iterate through all the classes
 	//checks if the student has taken it
-	for (var i = 0; i < dept_tbl.length; i++) {
+	for (var i = 0; i < courses_table.length; i++) {
 		//iterates through every class ever
-		var department = dept_tbl[i][0];
-		var number = dept_tbl[i][1];
+		var department = courses_table[i][0];
+		var number = courses_table[i][1];
 		//gets identifying information for the class
 		//now query the student_taken table
 		for (var x = 0; x < student_taken.length; i++) {
@@ -74,11 +74,13 @@ function recommend_classes(dept_tbl, student_enrolled, student_taken, requested_
 				//found a class he takes
 				for (var counter = 0; counter < 7; counter++) {
 					//pushes the score for that class into his classes_scores array
-					classes_scores[counter].push(dept_tbl[i][counter + 2]);
+					classes_scores[counter].push(courses_table[i][counter + 2]);
 				}
 			}
 		}
 	}
+
+	console.log(classes_scores_average);
 
 	//we now have a list of the scores for the classes the user took
 	//classes_scores
@@ -120,10 +122,10 @@ function recommend_classes(dept_tbl, student_enrolled, student_taken, requested_
 	var arr = [];
 
 	//we now have the average radius
-	//now go through dept_tbl
+	//now go through courses_table
 	//
 	if (requested_dept == "NULL") {
-		for (var i = 0; i < dept_tbl.length; i++) {
+		for (var i = 0; i < courses_table.length; i++) {
 			arr = [];
 
 			//iterates over all the classes
@@ -131,14 +133,19 @@ function recommend_classes(dept_tbl, student_enrolled, student_taken, requested_
 			//now I iterate through the particular class
 			for (var counter = 0; counter < 7; counter++) {
 				//pushes the score for that class into his classes_scores array
-				arr.push(dept_tbl[i][counter + 2]);
+				arr.push(courses_table[i][counter + 2]);
 			}
 			var dist = compute_distance(classes_scores_average, arr);
 			if (dist < average_difference) {
 				//department, number, distance, title, inst, Loc
 
 				recommedations.push({
-					dept_tbl[i][0], dept_tbl[i][1], average_differencedist, dept_tbl[i][9], dept_tbl[i][10], dept_tbl[i][1]
+					department: courses_table[i][0], 
+					number: courses_table[i][1], 
+					distance: average_differencedist, 
+					title: courses_table[i][9], 
+					inst: courses_table[i][10], 
+					loc: courses_table[i][1]
 				});
 				//suggest this class
 			}
@@ -147,10 +154,10 @@ function recommend_classes(dept_tbl, student_enrolled, student_taken, requested_
 		//search all classes
 	} else {
 		//we have a request
-		for (var i = 0; i < dept_tbl.length; i++) {
+		for (var i = 0; i < courses_table.length; i++) {
 			arr = [];
 
-			if (dept_tbl[i][0] == requested_dept) {
+			if (courses_table[i][0] == requested_dept) {
 
 
 				//iterates over all the classes
@@ -158,14 +165,19 @@ function recommend_classes(dept_tbl, student_enrolled, student_taken, requested_
 				//now I iterate through the particular class
 				for (var counter = 0; counter < 7; counter++) {
 					//pushes the score for that class into his classes_scores array
-					arr.push(dept_tbl[i][counter + 2]);
+					arr.push(courses_table[i][counter + 2]);
 				}
 				var dist = compute_distance(classes_scores_average, arr);
 				if (dist < average_difference) {
 					//department, number, distance, title, inst, Loc
 
 					recommedations.push({
-						dept_tbl[i][0], dept_tbl[i][1], average_difference - dist, dept_tbl[i][9], dept_tbl[i][10], dept_tbl[i][1]
+						department: courses_table[i][0], 
+						number: courses_table[i][1], 
+						distance: average_difference - dist, 
+						title: courses_table[i][9], 
+						inst: courses_table[i][10], 
+						loc: courses_table[i][1]
 					});
 					//suggest this class
 				}

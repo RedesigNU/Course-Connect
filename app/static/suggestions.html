@@ -7,8 +7,8 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-  <link href="{{url_for('static', filename='css/index.css')}}" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/index.css" rel="stylesheet">
   
   <body>
     <div class="navbar navbar-inverse navbar-purple navbar-fixed-top" role="navigation">
@@ -43,11 +43,11 @@
       <h3>Suggestions:</h3>
     </div>
   </div>
-  <script src="{{url_for('static',filename='js/jquery.min.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/index.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/typeahead.js')}}" rel="stylesheet"></script>
-  <script src="{{url_for('static', filename='js/algorithms.js')}}" rel="stylesheet"></script>
+  <script src="js/jquery.min.js" rel="stylesheet"></script>
+  <script src="js/bootstrap.min.js" rel="stylesheet"></script>
+  <script src="js/index.js" rel="stylesheet"></script>
+  <script src="js/typeahead.js" rel="stylesheet"></script>
+  <script src="js/algorithms.js" rel="stylesheet"></script>
   <script>
   var crs = "{{crs}}";
   crs = crs.split("|");
@@ -78,6 +78,7 @@
 
   $("#suggest").click(function() {
     a=recommend_classes(courses, [], student_taken, "NULL");
+    console.log(a);
   });
 
   function addTakenClass(course) {
