@@ -38,6 +38,7 @@
               <div>
                 <h5>Department:</h5>
                 <select id="departments" class="form-control browse-dropdown">
+                  <option value="NULL">No Preference</option>
                 </select>
               </div>
             </div>
@@ -50,6 +51,7 @@
       </div>
       <div class="panel panel-default col-sm-7">
         <h3>Suggestions:</h3>
+        <ul id="suggestions" class="list-group"></ul>
       </div>
     </div>
     <script src="{{url_for('static',filename='js/jquery.min.js')}}" rel="stylesheet"></script>
@@ -95,7 +97,11 @@
     });
 
     $("#suggest").click(function() {
-      a=recommend_classes(courses, [], student_taken, "NULL");
+      a=recommend_classes(courses, [], student_taken, $("#departments").val());
+      $("#suggestions").html('');
+      for(var i = 0; i < 10; i++) {
+        $("#suggestions").append('<a class="list-group-item"></a>');
+      }
     });
 
     function addTakenClass(course) {

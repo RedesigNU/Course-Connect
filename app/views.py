@@ -51,3 +51,13 @@ def courses():
 	print url
 	response = urllib2.urlopen(url)
 	return response.read()
+
+@app.route("/rate")
+def rate():
+	courses = ""
+	path = os.path.dirname(os.path.abspath(__file__)) + "/table.txt"
+	fyle = open(path)
+	for lyne in fyle :
+		courses += lyne.rstrip() + "|"
+	fyle.close()
+	return render_template("rate.html", crs=courses)

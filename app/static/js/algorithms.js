@@ -137,9 +137,14 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 		}
 		average_difference += compute_distance(classes_scores_average, temp);
 	}
+	console.log("classes_taken");
+	console.log(classes_taken);
 	average_difference /= classes_taken;
 
-	average_difference = 5322.6168;
+	average_difference *= 900;
+
+	console.log("average diff");
+	console.log(average_difference);
 
 	// console.log(average_difference);
 
@@ -149,13 +154,38 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 	//we now have the average radius
 	//now go through courses_table
 	//
-	while (recommendations.length < 10) {
-		if (requested_dept == "NULL") {
-			for (var i = 0; i < courses_table.length; i++) {
-				arr = [];
+	if (requested_dept == "NULL") {
+		for (var i = 0; i < courses_table.length; i++) {
+			arr = [];
+			//iterates over all the classes
+			//now I iterate through the particular class
+			for (var counter = 0; counter < 7; counter++) {
+				//pushes the score for that class into his classes_scores array
+				arr.push(courses_table[i][counter + 2]);
+			}
+			var dist = compute_distance(classes_scores_average, arr);
+			if (dist < average_difference) {
+				//department, number, distance, title, inst, Loc
+				recommendations.push({
+					department: courses_table[i][0],
+					number: courses_table[i][1],
+					distance: average_difference - dist,
+					title: courses_table[i][9],
+					inst: courses_table[i][10],
+					loc: courses_table[i][1]
+				});
+				//suggest this class
+			}
+			//test distances
+		}
+		//search all classes
+	} else {
+		//we have a request
+		for (var i = 0; i < courses_table.length; i++) {
+			arr = [];
+			if (courses_table[i][0] == requested_dept) {
 
-				//iterates over all the classes
-
+				//iteratees over all the classes
 				//now I iterate through the particular class
 				for (var counter = 0; counter < 7; counter++) {
 					//pushes the score for that class into his classes_scores array
@@ -164,7 +194,6 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 				var dist = compute_distance(classes_scores_average, arr);
 				if (dist < average_difference) {
 					//department, number, distance, title, inst, Loc
-
 					recommendations.push({
 						department: courses_table[i][0],
 						number: courses_table[i][1],
@@ -175,46 +204,15 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 					});
 					//suggest this class
 				}
-				//test distances
 			}
-			//search all classes
-		} else {
-			//we have a request
-			for (var i = 0; i < courses_table.length; i++) {
-				arr = [];
-
-				if (courses_table[i][0] == requested_dept) {
-
-
-					//iterates over all the classes
-
-					//now I iterate through the particular class
-					for (var counter = 0; counter < 7; counter++) {
-						//pushes the score for that class into his classes_scores array
-						arr.push(courses_table[i][counter + 2]);
-					}
-					var dist = compute_distance(classes_scores_average, arr);
-					if (dist < average_difference) {
-						//department, number, distance, title, inst, Loc
-
-						recommendations.push({
-							department: courses_table[i][0],
-							number: courses_table[i][1],
-							distance: average_difference - dist,
-							title: courses_table[i][9],
-							inst: courses_table[i][10],
-							loc: courses_table[i][1]
-						});
-						//suggest this class
-					}
-				}
-				//test distances
-			}
-
+			//test distances
 		}
-		average_difference += .1;
-		console.log(average_difference);
+
 	}
+	if (recommendations.length > 10) {
+		recommendations = recommendations.slice(0, 10);
+	}
+
 	console.log('Final diff');
 	console.log(average_difference);
 
