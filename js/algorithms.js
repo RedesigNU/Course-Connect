@@ -116,7 +116,26 @@ function recommend_classes (dept_tbl, student_enrolled, student_taken, requested
 	//we now have the average radius
 	//now go through dpt_tbl
 	//
+	if (requested_dpt=="NULL")
+	{
+		for( var i=0; i<dpt_tbl.length; i++)
+		{
+			//test distances
+		}
+		//search all classes
+	}
+	else
+	{
+		//we have a request
+		for( var i=0; i<dpt_tbl.length; i++)
+		{
+			if (dept_tbl[i][0]==requested_dpt)
+			{
+				//test distances
+			}
+		}
 
+	}
 
 	//we now have all the scores for the classes
 	//
