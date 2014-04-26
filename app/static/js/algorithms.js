@@ -19,12 +19,12 @@ function compute_distance(tbl1, tbl2)
 	var second = 0;
 	for (var i = 0; i < tbl1.length; i++) {
 
-		first = Math.pow(tbl1[i], 2);
-		second = Math.pow(tbl2[i], 2);
+		first = tbl1[i];
+		second = tbl2[i];
 		if (first > second)
-			returnme += first - second;
+			returnme += (first - second)*(first - second);
 		else
-			returnme += second - first;
+			returnme += (second - first)*(second - first);
 	}
 	return Math.pow(returnme, 0.5);
 
