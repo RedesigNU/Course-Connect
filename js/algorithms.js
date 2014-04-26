@@ -32,8 +32,21 @@ function compute_distance (tbl1, tbl2)
 
 }
 
+
+
+
+
+
+
+
+
+
+
 function recommend_classes (dept_tbl, student_enrolled, student_taken, requested_dpt)
 {
+
+	var recommedations=[];
+
 	//first build student description
 	//calculate total ratings for classes taken
 	var classes_taken=0;
@@ -102,16 +115,23 @@ function recommend_classes (dept_tbl, student_enrolled, student_taken, requested
 	//compute average radius by looping distance formula
 
 	for (var counter=0; counter<classes_taken; counter++)
+	//loops over classes taken
 	{
-		var temp=[];
+	var temp=[];
+		//this for loop fills temp
 		for (var counter2=0; counter2<7; counter2++)
 		{
-			var temp.push(classes_scores[counter2][counter]);
+			//loops over each rating
+			temp.push(classes_scores[counter2][counter]);
 			//gets a row in the 2d array
 		}
-		average_difference+=compute_distance(classes_scores_average,temp);
-	}	
+	average_difference+=compute_distance(classes_scores_average,temp);
+	}
 	average_difference/=classes_taken;
+		
+	
+
+	var arr=[];
 
 	//we now have the average radius
 	//now go through dpt_tbl
@@ -120,6 +140,24 @@ function recommend_classes (dept_tbl, student_enrolled, student_taken, requested
 	{
 		for( var i=0; i<dpt_tbl.length; i++)
 		{
+			arr=[];
+
+			//iterates over all the classes
+
+			//now I iterate through the particular class
+			for (var counter=0; counter<7; counter++)
+				{
+					//pushes the score for that class into his classes_scores array
+					arr.push(dept_tbl[i][counter+2]);
+				}
+			var dist = compute_distance(classes_scores_average,arr);
+			if (dist<average_difference)
+			{
+				//department, number, distance, title, inst, Loc
+
+				recommedations.push({dept_tbl[i][0],dept_tbl[i][1],average_difference-dist,dept_tbl[i][9],dept_tbl[i][10],dept_tbl[i][1]});
+				//suggest this class
+			}
 			//test distances
 		}
 		//search all classes
@@ -129,20 +167,34 @@ function recommend_classes (dept_tbl, student_enrolled, student_taken, requested
 		//we have a request
 		for( var i=0; i<dpt_tbl.length; i++)
 		{
-			if (dept_tbl[i][0]==requested_dpt)
+			arr=[];
+
+			if(dpt_tbl[i][0]==requested_dpt)
 			{
-				//test distances
+				
+
+				//iterates over all the classes
+
+				//now I iterate through the particular class
+				for (var counter=0; counter<7; counter++)
+					{
+						//pushes the score for that class into his classes_scores array
+						arr.push(dept_tbl[i][counter+2]);
+					}
+				var dist = compute_distance(classes_scores_average,arr);
+				if (dist<average_difference)
+				{
+					//department, number, distance, title, inst, Loc
+
+					recommedations.push({dept_tbl[i][0],dept_tbl[i][1],average_difference-dist,dept_tbl[i][9],dept_tbl[i][10],dept_tbl[i][1]});
+					//suggest this class
+				}
 			}
+			//test distances
 		}
 
 	}
-
+	return recommedations;
 	//we now have all the scores for the classes
 	//
-
-
-
-
-
-	
 }
