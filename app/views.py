@@ -65,3 +65,51 @@ def rate():
 		courses += lyne.rstrip() + "|"
 	fyle.close()
 	return render_template("rate.html", crs=courses)
+
+@app.route("/submit")
+def submit():
+    courses = ""
+    path = os.path.dirname(os.path.abspath(__file__)) + "/table.txt"
+    fyle = open(path)
+    for lyne in fyle :
+        courses += lyne.rstrip() + "|"
+    fyle.close()
+    param = [[request.args.get('subject'), request.args.get('name'), request.args.get('subject'), request.args.get('subject'), request.args.get('subject'), request.args.get('subject'), request.args.get('subject'), request.args.get('subject')]]
+    newCourses = []
+    for lyne in fyle :
+        arr = lyne.split("::")
+        newCourses.append(arr)
+    fyle.close()
+    courseFound = False
+    counter = 0
+	#iterating through all the courses the user rated
+    for rating in param:
+		#iterating through all the courses in the database
+		for courseMainTable in newCourses:
+			#check to see if you foudn the course
+			if (rating[0] == courseMainTable[0] and rating[1] == courseMainTable[1]):
+				print counter
+				courseFound = True
+				#if number of ratings is 0, then update ratings with user ratings
+				if (courseMainTable[16] == "0\n"):
+					for rat in range(2, 9):
+						courseMainTable[rat] = rating[rat]
+				else:
+					avg = courseMainTable[16]
+					for rat in range(2, 9):
+						newRating = (avg * courseMainTable[rat] + rating[rat]) / float(avg + 1)
+						courseMainTable[rat] = newRating
+				break
+			counter += 1
+		if courseFound:
+			break
+    f = open('table.txt', 'w')
+    for i in range(0, len(newCourses)):
+        test = newCourses[i]
+        line = test[0]
+        for j in range(1, len(test)):
+            line += "::" + str(test[j])
+        line += "\n"
+        f.write(line)
+    f.close()
+    return render_template("rate.html", crs=courses)
