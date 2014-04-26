@@ -1,12 +1,22 @@
+import re
 def parse():
 	courses = []
-	fyle = open("table.txt")
-	for lyne in fyle :
+	file = open("table.txt")
+	for line in file :
 		# Do string processing here
-		arr_parsed = lyne.split(":")
+		arr_parsed = unicode(line.split("::"))
 		courses.append(arr_parsed)
-	fyle.close()
+	file.close()
 	return courses;
+
+def convertToArray():
+	courses = []
+	file = open("table.txt")
+	for line in file:
+		arr_parse = line.split("::")
+		courses.append(arr_parse)
+	file.close()
+	return courses
 
 # #checkpoint
 # for i in range(0, len(courses)):
