@@ -95,6 +95,7 @@
 		})
 	});
 
+	//builds course array
 	var crs = "{{crs}}";
 	crs = crs.split("|");
 	var courses = [];
@@ -107,6 +108,7 @@
 		courseNames.push(course[0] + " " + course[1]);
 	}
 
+	//allows autocomplete for classes
 	$("#classes").typeahead({
 		displayKey: 'value',
 		source: courseNames,
@@ -115,6 +117,7 @@
 		}
 	});
 
+	//adds when enter is hit
 	$("#classes").keyup(function(e) {
 		if (e.keyCode == 13) {
 			var course = $("#classes").val();
@@ -122,10 +125,12 @@
 		}
 	});
 
+	//on click calls recommend_classes
 	$("#suggest").click(function() {
 		a=recommend_classes(courses, [], student_taken, "NULL");
 	});
 
+	
 	function addTakenClass(course) {
 		if(classesTaken.indexOf(course) < 0) {
 			student_taken.push(course.split(' '));  
