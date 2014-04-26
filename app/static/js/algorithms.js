@@ -7,12 +7,12 @@
 //dept num gpa
 //eecs 111 3.3
 
-
-function sortByKey(array, key) {
-    return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
+function compare(a,b) {
+  if (a.distance < b.distance)
+     return -1;
+  if (a.distance > b.distance)
+    return 1;
+  return 0;
 }
 
 function compute_distance(tbl1, tbl2)
@@ -216,7 +216,7 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 		}
 
 	}
-	recommedations=sortByKey(recommedations, distance)
+	recommedations.sort(compare);
 	return recommedations;
 	//we now have all the scores for the classes
 	//
