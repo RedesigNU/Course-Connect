@@ -1,3 +1,11 @@
 .main {
-	margin-top: 40px;
+	margin-top: 50px;
+}
+
+.center {
+	text-align: center;
+}
+
+.btn {
+	margin: 4px;
 }
