@@ -117,11 +117,11 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 	}
 	//the average score is now computed
 
-	console.log(classes_scores_average);
-
+	//console.log(classes_scores_average + ' TESTING');
+	console.log('TESTING');
 	//now how do we deterine the radius?
 	//compute average radius by looping distance formula
-
+	console.log(classes_taken);
 	for (var counter = 0; counter < classes_taken; counter++)
 		//loops over classes taken
 	{
@@ -129,7 +129,8 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 		//this for loop fills temp
 		for (var counter2 = 0; counter2 < 7; counter2++) {
 			//loops over each rating
-			temp.push(classes_scores[counter2][counter]);
+			temp.push(classes_scores[counter][counter2]);
+			console.log(temp);
 			//gets a row in the 2d array
 		}
 		average_difference += compute_distance(classes_scores_average, temp);
@@ -138,7 +139,7 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 
 	average_difference *= 1.5;
 
-
+	console.log(average_difference);
 
 	var arr = [];
 
