@@ -41,12 +41,17 @@ function get_class_scores(courses_table, student_taken)
 		var number = courses_table[i][1];
 		//gets identifying information for the class
 		//now query the student_taken table
-		for (var x = 0; x < student_taken.length; i++) 
+		for (var x = 0; x < student_taken.length; x++) 
 		{
+			console.log(department);
+			console.log(number);
+			console.log(student_taken[x][0]);
+			console.log(student_taken[x][1]);
 			//iterates through the classes the student has taken
 			if (student_taken[x][0] == department && student_taken[x][1] == number) 
 			{
-				classes_arr = []
+				console.log('equal');
+				var classes_arr = [];
 				//if there is a match
 				//found a class he takes
 				for (var counter = 0; counter < 7; counter++) 
