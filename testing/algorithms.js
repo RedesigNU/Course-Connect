@@ -33,7 +33,7 @@ function compute_distance(tbl1, tbl2)
 
 
 function recommend_classes(courses_table, student_enrolled, student_taken, requested_dept) {
-	console.log('HI MOM!');
+
 	var recommedations = [];
 
 	//first build student description

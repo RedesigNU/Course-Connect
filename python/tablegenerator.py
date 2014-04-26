@@ -26,7 +26,7 @@ html = resp.read()
 #terms = []
 js = json.loads(html)
 #for x in range(0, len(js)):
-term = js[0]['term_id']
+term = js[1]['term_id']
 
 #checkpoint
 #print terms[0]
@@ -73,7 +73,7 @@ for dept in depts:
 			else:
 				for ii in range(0, len(comp)):
 					components.append([comp[ii]['meeting_days'], comp[ii]['start_time'], comp[ii]['end_time'], comp[ii]['room'], comp[ii]['section']])
-			courses.append([dept, class_num, rating1, rating2, rating3, rating4, rating5, rating6, rating7, class_title, instructor, location, start_time, end_time, days, components])
+			courses.append([dept, class_num, rating1, rating2, rating3, rating4, rating5, rating6, rating7, class_title, instructor, location, start_time, end_time, days, components, 0])
 #		print "\n"
 
 
