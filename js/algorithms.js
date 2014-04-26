@@ -128,6 +128,8 @@ function recommend_classes (dept_tbl, student_enrolled, student_taken, requested
 	average_difference+=compute_distance(classes_scores_average,temp);
 	}
 	average_difference/=classes_taken;
+
+	average_difference*=1.5;
 		
 	
 
