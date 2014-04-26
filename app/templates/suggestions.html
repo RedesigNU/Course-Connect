@@ -97,7 +97,8 @@
     });
 
     $("#suggest").click(function() {
-      // var recomended=recommend_classes(courses, [], student_taken, $("#departments").val());
+      a=recommend_classes(courses, [], student_taken, $("#departments").val());
+      $("#suggestions").html('');
       for(var i = 0; i < 10; i++) {
         $("#suggestions").append('<a class="list-group-item"></a>');
       }
