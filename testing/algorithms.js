@@ -30,8 +30,18 @@ function compute_distance(tbl1, tbl2)
 
 }
 
-function get_scores(courses_table, student_taken)
+function get_class_scores(courses_table, student_taken)
 {
+	var classes_scores = [
+		[],
+		[],
+		[],
+		[],
+		[],
+		[],
+		[]
+			];
+
 	for (var i = 0; i < courses_table.length; i++) 
 	{
 		//iterates through every class ever
@@ -45,7 +55,6 @@ function get_scores(courses_table, student_taken)
 			if (student_taken[x][0] == department && student_taken[x][1] == number) 
 			{
 				//if there is a match
-				classes_taken++;
 				//found a class he takes
 				for (var counter = 0; counter < 7; counter++) 
 				{
@@ -55,6 +64,7 @@ function get_scores(courses_table, student_taken)
 			}
 		}
 	}
+	return classes_scores;
 }
 
 function recommend_classes(courses_table, student_enrolled, student_taken, requested_dept) {
@@ -63,13 +73,14 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 
 	//first build student description
 	//calculate total ratings for classes taken
-	var classes_taken = 0;
+	var classes_taken = student_taken.length;
 	//counts classes taken
 
 	var average_difference = 0;
 	//stores the avg distance from the average point
 
 	//we store a 2d array of the average ratings and each individual rating
+/*
 	var classes_scores = [
 		[],
 		[],
@@ -80,14 +91,13 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 		[]
 			];
 
-
+*/
 
 	var classes_scores_average = [0, 0, 0, 0, 0, 0, 0]
 
 
 
-
-		classes_scores=get_scores(courses_table, student_taken);
+	var	classes_scores=get_class_scores(courses_table, student_taken);
 	//iterate through all the classes
 	//checks if the student has taken it
 
@@ -198,6 +208,7 @@ function recommend_classes(courses_table, student_enrolled, student_taken, reque
 		}
 
 	}
+
 	return recommedations;
 	//we now have all the scores for the classes
 	//
